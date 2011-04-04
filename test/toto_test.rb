@@ -280,6 +280,13 @@ context Toto do
   context "extensions to the core Ruby library" do
     should("respond to iso8601") { Date.today }.respond_to?(:iso8601)
   end
+  context "GET a tag page" do 
+    setup { @toto.get('/tags/the-wizard-of-oz') }
+    asserts("returns a 200")                         { topic.status }.equals 200 
+    asserts("body is not empty")                     { not topic.body.empty? }
+    should("includes only the entries for that tag") { topic.body }.includes_elements("li.entry", 1)
+    should("has access to @tag")                     { topic.body }.includes_html("#tag" => /The Wizard of Oz/)
+  end
 end
 
 
