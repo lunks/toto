@@ -121,14 +121,14 @@ module Toto
               context[article(route), :article]
             else http 400
           end
-        elsif respond_to?(path)
-          context[send(path, type), path.to_sym]
         elsif route.first == 'tags' && route.size == 2
           if (data = archives('', route[1])).nil?
             http 404
            else
             context[data, :tag]
            end
+        elsif respond_to?(path)
+          context[send(path, type), path.to_sym]
         elsif (repo = @config[:github][:repos].grep(/#{path}/).first) &&
               !@config[:github][:user].empty?
           context[Repo.new(repo, @config), :repo]
